@@ -170,6 +170,17 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set({ 'n', 'i', 'v', 'c', 't' }, '<C-c>', '<Esc>', { noremap = true, silent = true })
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+-- Go to Next Diagnostic with <leader> [
+
+vim.keymap.set('n', '<leader>[', function()
+  vim.diagnostic.jump { count = 1 }
+end, { desc = 'Go to Next Diagnostic' })
+
+-- Go to Prev Diagnostic with <leader> ]
+
+vim.keymap.set('n', '<leader>]', function()
+  vim.diagnostic.jump { count = -1 }
+end, { desc = 'Go to Prev Diagnostic' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -263,6 +274,10 @@ require('lazy').setup({
   -- options to `gitsigns.nvim`.
   --
   -- See `:help gitsigns` to understand what the configuration keys do
+  {
+    'supermaven-inc/supermaven-nvim',
+    opts = {},
+  },
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -405,6 +420,14 @@ require('lazy').setup({
         --   },
         -- },
         -- pickers = {}
+
+        defaults = {
+          file_ignore_patterns = {
+            '^node_modules/*',
+            'node_modules/.*',
+          },
+        },
+
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
