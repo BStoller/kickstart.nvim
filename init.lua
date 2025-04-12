@@ -176,6 +176,8 @@ vim.keymap.set('n', '<leader>[', function()
   vim.diagnostic.jump { count = 1 }
 end, { desc = 'Go to Next Diagnostic' })
 
+vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', { noremap = true })
+
 -- Go to Prev Diagnostic with <leader> ]
 
 vim.keymap.set('n', '<leader>]', function()
@@ -224,6 +226,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
+-- Absolute path
+vim.keymap.set('n', '<leader>pc', function()
+  vim.fn.setreg('+', vim.fn.expand '%:p')
+end, { noremap = true, silent = true })
+
+-- Relative path (replace `%:p` with `%`)
+vim.keymap.set('n', '<leader>pr', function()
+  vim.fn.setreg('+', vim.fn.expand '%')
+end, { noremap = true, silent = true })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -274,10 +286,6 @@ require('lazy').setup({
   -- options to `gitsigns.nvim`.
   --
   -- See `:help gitsigns` to understand what the configuration keys do
-  {
-    'supermaven-inc/supermaven-nvim',
-    opts = {},
-  },
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
