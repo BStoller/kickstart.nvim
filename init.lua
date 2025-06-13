@@ -294,6 +294,13 @@ require('lazy').setup({
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`.
   --
+
+  {
+    'supermaven-inc/supermaven-nvim',
+    config = function()
+      require('supermaven-nvim').setup {}
+    end,
+  },
   -- See `:help gitsigns` to understand what the configuration keys do
   {
     'f-person/git-blame.nvim',
