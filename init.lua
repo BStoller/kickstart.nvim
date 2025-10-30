@@ -295,12 +295,29 @@ require('lazy').setup({
   -- options to `gitsigns.nvim`.
   --
 
+  -- Use local modified version of supermaven-nvim
   {
-    'supermaven-inc/supermaven-nvim',
+    'BStoller/SuperTab',
     config = function()
-      require('supermaven-nvim').setup {}
+      require('supertab').setup {
+        api = {
+          url = 'https://api.groq.com/openai/v1/chat/completions',
+          api_key = vim.env.GROQ_API_KEY,
+          model = 'meta-llama/llama-4-maverick-17b-128e-instruct',
+          max_tokens = 1000,
+          temperature = 0.7,
+        },
+      }
     end,
   },
+
+  -- ORIGINAL VERSION (commented out for easy switching):
+  -- {
+  --   'supermaven-inc/supermaven-nvim',
+  --   config = function()
+  --     require('supermaven-nvim').setup {}
+  --   end,
+  -- },
   -- See `:help gitsigns` to understand what the configuration keys do
   {
     'f-person/git-blame.nvim',
@@ -863,7 +880,9 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       -- Remove sourcekit from ensure_installed since it's not a Mason package
-      ensure_installed = vim.tbl_filter(function(name) return name ~= 'sourcekit' end, ensure_installed)
+      ensure_installed = vim.tbl_filter(function(name)
+        return name ~= 'sourcekit'
+      end, ensure_installed)
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
       })
