@@ -303,9 +303,12 @@ require('lazy').setup({
         api = {
           url = 'https://api.groq.com/openai/v1/chat/completions',
           api_key = vim.env.GROQ_API_KEY,
-          model = 'meta-llama/llama-4-maverick-17b-128e-instruct',
+          model = 'qwen/qwen3-32b',
           max_tokens = 1000,
           temperature = 0.7,
+          extra_params = {
+            reasoning_effort = 'none',
+          },
           context = {
             treesitter = {
               enabled = false,
@@ -1041,12 +1044,43 @@ require('lazy').setup({
       -- set use_icons to true if you have a Nerd Font
       statusline.setup { use_icons = vim.g.have_nerd_font }
 
+      -- Custom section for SuperTab metrics
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.section_supertab = function()
+        local ok, api = pcall(require, 'supertab.api')
+        if not ok or not api.is_running() then
+          return ' | ST:off'
+        end
+
+        local m = api.get_completion_metrics()
+        if m.total_tokens == 0 then
+          return ' | ST:✓'
+        end
+
+        local parts = {}
+
+        -- Total tokens
+        table.insert(parts, string.format('%dt', m.total_tokens))
+
+        -- Latency to first byte
+        if m.first_token_ms and m.first_token_ms > 0 then
+          table.insert(parts, string.format('ttfb:%dms', m.first_token_ms))
+        end
+
+        if #parts > 0 then
+          return ' | ST:' .. table.concat(parts, ' ')
+        else
+          return ' | ST:✓'
+        end
+      end
+
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
-        return '%2l:%-2v'
+        local supertab = statusline.section_supertab()
+        return '%2l:%-2v' .. supertab
       end
 
       -- ... and there is more!
