@@ -306,6 +306,11 @@ require('lazy').setup({
           model = 'meta-llama/llama-4-maverick-17b-128e-instruct',
           max_tokens = 1000,
           temperature = 0.7,
+          context = {
+            treesitter = {
+              enabled = false,
+            },
+          },
         },
       }
     end,
