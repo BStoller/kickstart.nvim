@@ -311,7 +311,7 @@ require('lazy').setup({
           },
           context = {
             treesitter = {
-              enabled = false,
+              max_depth = 1,
             },
           },
         },
@@ -1058,6 +1058,11 @@ require('lazy').setup({
         end
 
         local parts = {}
+
+        -- Context file count
+        if m.context_file_count and m.context_file_count > 0 then
+          table.insert(parts, string.format('%df', m.context_file_count))
+        end
 
         -- Total tokens
         table.insert(parts, string.format('%dt', m.total_tokens))
